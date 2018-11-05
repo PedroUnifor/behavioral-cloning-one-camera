@@ -16,11 +16,11 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driving_log.csv'), names=['center', 'left', 'right', 'steering', 'throttle', 'reverse', 'speed'])
+    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log.csv'), names=['camera', 'linear', 'angular'])
 
     #X = data_df[['center', 'left', 'right']].values
-    X = data_df['center'].values
-    y = data_df['steering'].values
+    X = data_df['camera'].values
+    y = data_df['linear'].values
 
     X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=args.test_size, random_state=0)
     print('--------- ESSE E O X TRAIN -------------')
