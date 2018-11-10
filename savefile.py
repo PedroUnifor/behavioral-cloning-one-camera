@@ -58,7 +58,6 @@ def listener():
     valores = rospy.Subscriber("drrobot_cmd_vel", Twist, callback)
 
     # spin() simply keeps python from exiting until this node is stopped
-    rospy.Rate(10)
     rospy.spin()
 
 b = 1
