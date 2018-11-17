@@ -7,7 +7,8 @@ from keras.callbacks import ModelCheckpoint
 from keras.layers import Lambda, Conv2D, MaxPooling2D, Dropout, Dense, Flatten
 from utils import INPUT_SHAPE, batch_generator
 import argparse
-import os
+import cv2, os
+import matplotlib.pyplot as plt
 
 np.random.seed(0)
 
@@ -16,17 +17,27 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log.csv'), names=['camera', 'linear', 'angular'])
+    data_df = pd.read_csv(os.path.join(os.getcwd(), 'behavioral-cloning-one-camera/Data/driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
 
     #X = data_df[['center', 'left', 'right']].values
-    X = data_df['camera'].values
-    y = data_df['linear'].values
+    X = data_df['center'].values
+    y = data_df[['rotacao']].values
 
     X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=args.test_size, random_state=0)
     print('--------- ESSE E O X TRAIN -------------')
-    print(X_train)
+    print(X_train[0])
+    #plt.imshow(X_train[0])
+    #plt.show()
+    print('--------- ESSE E O X VALID -------------')
+    print(X_valid)
     print('--------- ESSE E O Y TRAIN -------------')
     print(y_train)
+    print('--------- ESSE E O Y VALID -------------')
+    print(y_valid)
+    #print(y_valid[0,1])
+    #print(y_valid[1,1])
+    #print(y_valid[2,1])
+	
 
 
     return X_train, X_valid, y_train, y_valid
@@ -88,7 +99,7 @@ def main():
     """
     parser = argparse.ArgumentParser(description='Behavioral Cloning Training Program')
     parser.add_argument('-d', help='data directory',        dest='data_dir',          type=str,   default='data')
-    parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.2)
+    parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.1)
     parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
     parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=10)
     parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=20000)
