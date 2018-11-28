@@ -17,7 +17,7 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), '/home/pedro/behavioral-cloning-one-camera/Data/driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
+    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
 
     #X = data_df[['center', 'left', 'right']].values
     X = data_df['center'].values
@@ -25,7 +25,7 @@ def load_data(args):
 
     X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=args.test_size, random_state=0)
     print('--------- ESSE E O X TRAIN -------------')
-    print(X_train[0])
+    print(X_train)
     #plt.imshow(X_train[0])
     #plt.show()
     print('--------- ESSE E O X VALID -------------')
@@ -34,6 +34,7 @@ def load_data(args):
     print(y_train)
     print('--------- ESSE E O Y VALID -------------')
     print(y_valid)
+    print(args.data_dir)
     #print(y_valid[0,1])
     #print(y_valid[1,1])
     #print(y_valid[2,1])
@@ -98,12 +99,12 @@ def main():
     Load train/validation data set and train the model
     """
     parser = argparse.ArgumentParser(description='Behavioral Cloning Training Program')
-    parser.add_argument('-d', help='data directory',        dest='data_dir',          type=str,   default='data')
-    parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.1)
+    parser.add_argument('-d', help='data directory',        dest='data_dir',          type=str,   default='Data')
+    parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.2)
     parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
-    parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=10)
-    parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=20000)
-    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=40)
+    parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=5)
+    parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=20)
+    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=5)
     parser.add_argument('-o', help='save best models only', dest='save_best_only',    type=s2b,   default='True')
     parser.add_argument('-l', help='learning rate',         dest='learning_rate',     type=float, default=1.0e-4)
     args = parser.parse_args()

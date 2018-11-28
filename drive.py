@@ -21,7 +21,6 @@ from keras.models import load_model
 
 import utils
 
-sio = socketio.Server()
 app = Flask(__name__)
 model = None
 prev_image_array = None
@@ -70,8 +69,6 @@ def telemetry():
             print(e)
 
 if __name__ == '__main__':
-    velocidade = Twist()
-    pub = rospy.Publisher('drrobot_cmd_vel', Twist, queue_size=10)
     parser = argparse.ArgumentParser(description='Remote Driving')
     parser.add_argument(
         'model',
@@ -88,6 +85,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     model = load_model(args.model)
+
+    velocidade = Twist()
+    pub = rospy.Publisher('drrobot_cmd_vel', Twist, queue_size=10)
     while not rospy.is_shutdown():
        telemetry()
 
