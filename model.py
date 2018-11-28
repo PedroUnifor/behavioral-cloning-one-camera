@@ -17,7 +17,7 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), 'behavioral-cloning-one-camera/Data/driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
+    data_df = pd.read_csv(os.path.join(os.getcwd(), '/home/pedro/behavioral-cloning-one-camera/Data/driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
 
     #X = data_df[['center', 'left', 'right']].values
     X = data_df['center'].values
