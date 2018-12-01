@@ -1,16 +1,17 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import csv
 import re
 import os
-import urllib.request
+import urllib
 from datetime import datetime
 from time import sleep
 import rospy
 from geometry_msgs.msg import Twist
 
 log = open('Data/driver_log.csv', 'w')
-#url = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/m1UI4XnQF7NZHBXdfRBDhVQheIz.jpg"
-url = "http://192.168.0.65/jpg/image.jpg"
+url = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/m1UI4XnQF7NZHBXdfRBDhVQheIz.jpg"
+#url = "http://192.168.0.65/jpg/image.jpg"
 def salvarArquivos(x, z):
     log = open('Data/driver_log.csv', 'a')
     escrever = csv.writer(log)
