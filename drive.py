@@ -3,7 +3,7 @@ import base64
 from datetime import datetime
 import os
 import shutil
-
+import cv2
 import numpy as np
 import socketio
 import eventlet
@@ -11,8 +11,7 @@ import eventlet.wsgi
 from PIL import Image
 from flask import Flask
 from io import BytesIO
-
-import requests
+import urllib
 
 import rospy
 from geometry_msgs.msg import Twist
@@ -33,6 +32,7 @@ MIN_SPEED = 0.1
 speed_limit = MAX_SPEED
 
 url = "http://192.168.0.65/jpg/image.jpg"
+#url = "https://pay.google.com/about/static/images/social/og_image.jpg"
 
 def telemetry():
         # The current steering angle of the car
@@ -48,25 +48,25 @@ def telemetry():
         #speed = float(data["speed"])
         speed = 0.0
         # The current image from the center camera of the car
-        response = requests.get(url)
-        image = Image.open(BytesIO(base64.b64decode(response.content)))
-        try:
-            image = np.asarray(image)       # from PIL image to numpy array
-            image = utils.preprocess(image) # apply the preprocessing
-            image = np.array([image])       # the model expects 4D array
-            steering_angle = float(model.predict(image, batch_size=1)) # colocar valores do throttle junto do steering_angle
+        resp = urllib.urlopen(url)
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+        #cv2.imshow('image', image)
+        image = np.asarray(image)       # from PIL image to numpy array
+        image = utils.preprocess(image) # apply the preprocessing
+        image = np.array([image])       # the model expects 4D array
+        steering_angle = float(model.predict(image, batch_size=1)) # colocar valores do throttle junto do steering_angle
          
-            throttle = 1.0 - abs(steering_angle)
-            if throttle>MAX_SPEED:
-                throttle=MAX_SPEED
-            if throttle<MIN_SPEED:
-                throttle=MIN_SPEED
-            print('{} {}'.format(steering_angle, throttle))
-            velocidade.linear.x = throttle
-            velocidade.angular.z = steering_angle
-            pub.publish(velocidade)
-        except Exception as e:
-            print(e)
+        throttle = 1.0 - abs(steering_angle)
+        if throttle>MAX_SPEED:
+             throttle=MAX_SPEED
+        if throttle<MIN_SPEED:
+             throttle=MIN_SPEED
+        print('{} {}'.format(steering_angle, throttle))
+        velocidade.linear.x = throttle
+        velocidade.angular.z = steering_angle
+        rospy.init_node('bhv_clone', anonymous=True)
+        pub.publish(velocidade) 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Remote Driving')
@@ -88,6 +88,7 @@ if __name__ == '__main__':
 
     velocidade = Twist()
     pub = rospy.Publisher('drrobot_cmd_vel', Twist, queue_size=10)
+    #init_node()
     while not rospy.is_shutdown():
        telemetry()
 
