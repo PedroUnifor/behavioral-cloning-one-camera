@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 import csv
 import re
 import os
@@ -19,7 +20,9 @@ def salvarArquivos(x, z):
     while os.path.exists("Data/IMG/imagem%s.jpg" % i):
         i += 1
     try:
+	#print('deu certo até aqui 1')
         urllib.request.urlretrieve(url, "Data/IMG/imagem%s.jpg" % i)
+	#print("deu certo até aqui 2")
         nomeimagem = os.getcwd()+"/Data/IMG/imagem%s.jpg" % i
         print("imagem %s baixada com sucesso!" % i)
     except:
