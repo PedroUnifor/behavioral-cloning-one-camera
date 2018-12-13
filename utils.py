@@ -19,7 +19,7 @@ def crop(image):
     """
     Crop the image (removing the sky at the top and the car front at the bottom)
     """
-    return image[60:-25, :, :] # remove the sky and the car front
+    return image[80:-25, :, :] # remove the sky and the car front #defalt: [60:-25, :, :]
 
 
 def resize(image):
