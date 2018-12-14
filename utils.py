@@ -18,7 +18,7 @@ def crop(image):
     """
     Crop the image (removing the sky at the top and the car front at the bottom)
     """
-    return image[280:-25, :, :] # remove the sky and the car front defalt: [60:-25, :, :]
+    return image[270:-25, :, :] # remove the sky and the car front defalt: [60:-25, :, :]
 
 
 def resize(image):
@@ -42,9 +42,9 @@ def preprocess(image):
 
     image = crop(image)
 
-    cv2.imshow('image',image)
-    cv2.waitKey(200)
-    cv2.destroyAllWindows()
+    #cv2.imshow('image',image)
+    #cv2.waitKey(200)
+    #cv2.destroyAllWindows()
 
     image = resize(image)
 
@@ -54,9 +54,9 @@ def preprocess(image):
 
     image = rgb2yuv(image)
 
-    cv2.imshow('image',image)
-    cv2.waitKey(200)
-    cv2.destroyAllWindows() 
+    #cv2.imshow('image',image)
+    #cv2.waitKey(200)
+    #cv2.destroyAllWindows() 
     return image
 
 
