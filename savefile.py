@@ -21,7 +21,7 @@ def salvarArquivos(x, z):
         i += 1
     try:
         urllib.request.urlretrieve(url, "Data/IMG/imagem%s.jpg" % i)
-        nomeimagem = os.getcwd()+"/Data/IMG/imagem%s.jpg" % i
+        nomeimagem = "IMG/imagem%s.jpg" % i #os.getcwd()+"/Data/ EDIÇÕES
         print("imagem %s baixada com sucesso!" % i)
     except:
         print('ocorreu um erro no download da imagem %s' % i)
