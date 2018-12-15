@@ -17,7 +17,7 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log.csv'), names=['center', 'aceleracao', 'rotacao'])
+    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log.csv'), names=['center', 'aceleracao', 'rotacao']) #carrega o arquivo CSV para o DataFrame
 
     #X = data_df[['center', 'left', 'right']].values
     X = data_df['center'].values
@@ -94,7 +94,7 @@ def s2b(s):
     return s == 'true' or s == 'yes' or s == 'y' or s == '1'
 
 
-def main():
+def main(): #Parametros do modelo
     """
     Load train/validation data set and train the model
     """
@@ -102,7 +102,7 @@ def main():
     parser.add_argument('-d', help='data directory',        dest='data_dir',          type=str,   default='Data')
     parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.2)
     parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
-    parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=20)
+    parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=15)
     parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=10000)
     parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=150)
     parser.add_argument('-o', help='save best models only', dest='save_best_only',    type=s2b,   default='True')
