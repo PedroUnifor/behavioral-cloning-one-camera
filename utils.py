@@ -3,7 +3,6 @@ import cv2, os
 import numpy as np
 import matplotlib.image as mpimg
 
-
 IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS = 66, 200, 3
 INPUT_SHAPE = (IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS)
 
@@ -19,7 +18,7 @@ def crop(image):
     """
     Crop the image (removing the sky at the top and the car front at the bottom)
     """
-    return image[60:-25, :, :] # remove the sky and the car front
+    return image[270:-25, :, :] # remove the sky and the car front defalt: [60:-25, :, :]
 
 
 def resize(image):
@@ -40,9 +39,24 @@ def preprocess(image):
     """
     Combine all preprocess functions into one
     """
+
     image = crop(image)
+
+    #cv2.imshow('image',image)
+    #cv2.waitKey(200)
+    #cv2.destroyAllWindows()
+
     image = resize(image)
+
+    #cv2.imshow('image',image)
+    #cv2.waitKey(100)
+    #cv2.destroyAllWindows()
+
     image = rgb2yuv(image)
+
+    #cv2.imshow('image',image)
+    #cv2.waitKey(200)
+    #cv2.destroyAllWindows() 
     return image
 
 
@@ -140,16 +154,19 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
     """
     Generate training image give image paths and associated steering angles
     """
-    images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS])
-    steers = np.empty(batch_size)
-    print(image_paths.shape[0])
+    images = np.empty([batch_size, IMAGE_HEIGHT, IMAGE_WIDTH, IMAGE_CHANNELS]) #buscando a imagem
+    steers = np.empty(batch_size)#tamanho do batch (criando um vetor vazia)
+    print(image_paths.shape[0]) 
     while True:
         i = 0
-        for index in np.random.permutation(image_paths.shape[0]):
+        #print("aaaaaaaa")
+        for index in np.random.permutation(image_paths.shape[0]): 
+            #print(index)
             center = image_paths[index]
             steering_angle = steering_angles[index]
+            #print("aaaaaaaa")
             # argumentation
-            if is_training and np.random.rand() < 0.6:
+            if is_training and np.random.rand() < 0.6: #cria um numero radomico 
                 image, steering_angle = augument(data_dir, center, steering_angle)
             else:
                 image = load_image(data_dir, center)
@@ -159,5 +176,6 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
             i += 1
             if i == batch_size:
                 break
+            #print(data_dir)
         yield images, steers
 

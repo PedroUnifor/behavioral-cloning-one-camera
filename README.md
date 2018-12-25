@@ -114,3 +114,4 @@ Por final, é possível executar o drive.py para Jaguar ser controlado de forma 
 Para executar o drive.py é preciso abrir um Terminal na pasta que se encontra o arquivo e digitar o seguinte comando: 
 python3.5 drive.py model-xxx.h5 (onde o ‘xxx’ é o número do modelo escolhido pelo usuário)
 É recomendado o teste de vários modelos até achar o correto. Se não obtiver nenhum erro, provavelmente o jaguar estará sendo pilotado de forma autonoma. 
+
