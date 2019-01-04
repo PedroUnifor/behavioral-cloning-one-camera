@@ -5,17 +5,19 @@ import re
 import os
 import urllib.request
 from datetime import datetime
-from time import sleep
+import time
 import rospy
 from geometry_msgs.msg import Twist
 
 log = open('Data/driver_log.csv', 'w')
 #url = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/m1UI4XnQF7NZHBXdfRBDhVQheIz.jpg"
 url = "http://192.168.0.65/jpg/image.jpg" #LINK DA IMAGEM
+linearX = 0.0
+angularZ = 0.0
 def salvarArquivos(x, z):
     log = open('Data/driver_log.csv', 'a')
     escrever = csv.writer(log)
-    j = 0
+    j = 0 
     i = 0
     while os.path.exists("Data/IMG/imagem%s.jpg" % i): #VERIFICA A ULTIMA IMAGEM SALVA
         i += 1
@@ -28,20 +30,24 @@ def salvarArquivos(x, z):
     try:
         escrever.writerow((nomeimagem, x, z)) #SALVA A IMAGEM NO ARQUIVO DE LOG, JUNTAMENTE COM O VALOR DE X e Y
         print("imagem %s salva no arquivo de Log com sucesso!" % i)
+	#print("imagem: %s, X: %s, Y: %s" %nomeimagem, %x, %z)
     except:
         print('ocorreu um erro para salvar a imagem %s' % i)
     i += 1
     j += 1 
     print(os.getcwd())
     log.close()
+    listener()
 
+#não está precisando por enquanto
 def callback(data): # COLOCA O VALOR ENVIADO DO NO NAS VARIÁVIES X e Y
     #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    x = data.linear.x
-    print('X: ', x)
-    z = data.angular.z
-    print('z: ', z)
-    salvarArquivos(x,z)
+    linear_x = data.linear.x
+    print('X: ', linear_x)
+    angular_z = data.angular.z
+    print('z: ', angular_z)
+    salvarArquivos(linear_x,angular_z)
+    
     
 def listener(): #ESCULTA O NÓ DE COMUNICAÇÃO DE CONTROLE COM O ROS
 
@@ -51,16 +57,25 @@ def listener(): #ESCULTA O NÓ DE COMUNICAÇÃO DE CONTROLE COM O ROS
     # name for our 'listener' node so that multiple listeners can
     # run simultaneously.
     rospy.init_node('NodeDeTeste', anonymous=True)
-
     #procura  um node com o nome definido atrás da mensagem Twist declada
     #para executar a função callback
-    valores = rospy.Subscriber("drrobot_cmd_vel", Twist, callback)
-
+    #valores = rospy.Subscriber("drrobot_cmd_vel", Twist, callback)
+    data = rospy.wait_for_message("drrobot_cmd_vel", Twist)
+    #callback(data)
+    linear_x = data.linear.x
+    print('X: ', linear_x)
+    angular_z = data.angular.z
+    print('z: ', angular_z)
+    
+    salvarArquivos(linear_x,angular_z)
+    print("ele chegou até aqui 3")
     # spin() simply keeps python from exiting until this node is stopped
-    rospy.Rate(10)
-    rospy.spin()
+    #rospy.spin()
+    
 
-b = 1
-if __name__ == '__main__':
-    while b == 1:
-        listener()
+
+
+print("Iniciando...")
+listener()
+	
+
