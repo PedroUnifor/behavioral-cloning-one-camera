@@ -12,8 +12,10 @@ from geometry_msgs.msg import Twist
 log = open('Data/driver_log.csv', 'w')
 #url = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/m1UI4XnQF7NZHBXdfRBDhVQheIz.jpg"
 url = "http://192.168.0.65/jpg/image.jpg" #LINK DA IMAGEM
+
 linearX = 0.0
 angularZ = 0.0
+
 def salvarArquivos(x, z):
     log = open('Data/driver_log.csv', 'a')
     escrever = csv.writer(log)
