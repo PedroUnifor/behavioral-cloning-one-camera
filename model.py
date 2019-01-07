@@ -104,7 +104,7 @@ def main(): #Parametros do modelo
     parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
     parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=20)
     parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=50000)
-    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=180)
+    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=200)
     parser.add_argument('-o', help='save best models only', dest='save_best_only',    type=s2b,   default='True')
     parser.add_argument('-l', help='learning rate',         dest='learning_rate',     type=float, default=1.0e-3)
     args = parser.parse_args()
