@@ -26,7 +26,7 @@ prev_image_array = None
 
 #MAX_SPEED = 25
 #MIN_SPEED = 6
-MAX_SPEED = 0.9
+MAX_SPEED = 0.5
 MIN_SPEED = 0.1
 
 speed_limit = MAX_SPEED
