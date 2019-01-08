@@ -52,7 +52,7 @@ def preprocess(image):
     #cv2.waitKey(1000)
     #cv2.destroyAllWindows()
 
-    #image = rgb2yuv(image)
+    image = rgb2yuv(image)
 
     #cv2.imshow('image',image)
     #cv2.waitKey(1000)
