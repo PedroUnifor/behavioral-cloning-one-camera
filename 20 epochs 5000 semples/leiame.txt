@@ -1,0 +1,53 @@
+parser = argparse.ArgumentParser(description='Behavioral Cloning Training Program')
+    parser.add_argument('-d', help='data directory',        dest='data_dir',          type=str,   default='Data')
+    parser.add_argument('-t', help='test size fraction',    dest='test_size',         type=float, default=0.2)
+    parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
+    parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=20)
+    parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=5000)
+    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=150)
+    parser.add_argument('-o', help='save best models only', dest='save_best_only',    type=s2b,   default='True')
+    parser.add_argument('-l', help='learning rate',         dest='learning_rate',     type=float, default=1.0e-3)
+
+
+
+221
+5100/5000 [==============================] - 124s - loss: 0.0826 - val_loss: 0.0509
+Epoch 2/20
+5100/5000 [==============================] - 113s - loss: 0.0718 - val_loss: 0.0480
+Epoch 3/20
+5100/5000 [==============================] - 108s - loss: 0.0719 - val_loss: 0.0418
+Epoch 4/20
+5100/5000 [==============================] - 117s - loss: 0.0696 - val_loss: 0.0393
+Epoch 5/20
+5100/5000 [==============================] - 115s - loss: 0.0689 - val_loss: 0.0427
+Epoch 6/20
+5100/5000 [==============================] - 108s - loss: 0.0725 - val_loss: 0.0350
+Epoch 7/20
+5100/5000 [==============================] - 110s - loss: 0.0693 - val_loss: 0.0381
+Epoch 8/20
+5100/5000 [==============================] - 126s - loss: 0.0707 - val_loss: 0.0385
+Epoch 9/20
+5100/5000 [==============================] - 122s - loss: 0.0696 - val_loss: 0.0449
+Epoch 10/20
+5100/5000 [==============================] - 129s - loss: 0.0687 - val_loss: 0.0358
+Epoch 11/20
+5100/5000 [==============================] - 114s - loss: 0.0716 - val_loss: 0.0310
+Epoch 12/20
+5100/5000 [==============================] - 114s - loss: 0.0693 - val_loss: 0.0371
+Epoch 13/20
+5100/5000 [==============================] - 111s - loss: 0.0683 - val_loss: 0.0408
+Epoch 14/20
+5100/5000 [==============================] - 122s - loss: 0.0741 - val_loss: 0.0403
+Epoch 15/20
+5100/5000 [==============================] - 114s - loss: 0.0698 - val_loss: 0.0497
+Epoch 16/20
+5100/5000 [==============================] - 112s - loss: 0.0758 - val_loss: 0.0355
+Epoch 17/20
+5100/5000 [==============================] - 115s - loss: 0.0749 - val_loss: 0.0386
+Epoch 18/20
+5100/5000 [==============================] - 108s - loss: 0.0744 - val_loss: 0.0386
+Epoch 19/20
+5100/5000 [==============================] - 111s - loss: 0.0788 - val_loss: 0.0423
+Epoch 20/20
+5100/5000 [==============================] - 109s - loss: 0.0774 - val_loss: 0.0431
+
