@@ -25,7 +25,7 @@ model = None
 prev_image_array = None
 
 
-MAX_SPEED = 0.5
+MAX_SPEED = 0.4
 MIN_SPEED = 0.1
 
 speed_limit = MAX_SPEED
