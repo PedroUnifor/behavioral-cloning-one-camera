@@ -17,13 +17,13 @@ def load_data(args):
     """
     Load training data and split it into training and validation set
     """
-    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log_02.csv'), names=['center', 'aceleracao', 'rotacao']) #carrega o arquivo CSV para o DataFrame
+    data_df = pd.read_csv(os.path.join(os.getcwd(), args.data_dir, 'driver_log_02.csv'), names=['center', 'aceleracao', 'rotacao']) #carrega o arquivo CSV para o DataFrame e atribuir os valores de imagens para center, aceleração para aceleração e rotação para rotação
 
-    #X = data_df[['center', 'left', 'right']].values
-    X = data_df['center'].values
-    y = data_df[['rotacao']].values
+    X = data_df['center'].values #colocar o valor do dataframe center pro X
+    y = data_df[['rotacao']].values #colocar o valor do dataframe center pro Y (rotação)
 
-    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=args.test_size, random_state=0)
+    X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=args.test_size, random_state=0) #random_state = pegar as imagens em ordem aleatória
+	#test_size = percentual de treino e teste
     print('--------- ESSE E O X TRAIN -------------')
     print(X_train)
     #plt.imshow(X_train[0])
@@ -35,19 +35,14 @@ def load_data(args):
     print('--------- ESSE E O Y VALID -------------')
     print(y_valid)
     print(args.data_dir)
-    #print(y_valid[0,1])
-    #print(y_valid[1,1])
-    #print(y_valid[2,1])
-	
-
 
     return X_train, X_valid, y_train, y_valid
 
 
-def build_model(args):
+def build_model(args): #criar a rede neural
 
-    model = Sequential()
-    model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE))
+    model = Sequential() #cria um espaço em branco na memoria para o keras trabalhar
+    model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #camada de normalização
     model.add(Conv2D(24, 5, 5, activation='elu', subsample=(2, 2)))
     model.add(Conv2D(36, 5, 5, activation='elu', subsample=(2, 2)))
     model.add(Conv2D(48, 5, 5, activation='elu', subsample=(2, 2)))
@@ -59,30 +54,30 @@ def build_model(args):
     model.add(Dense(50, activation='elu'))
     model.add(Dense(10, activation='elu'))
     model.add(Dense(1))
-    model.summary()
+    model.summary() #imprime os valores dos layers
 
     return model
 
 
-def train_model(model, args, X_train, X_valid, y_train, y_valid):
+def train_model(model, args, X_train, X_valid, y_train, y_valid): #treinar o modelo
     """
     Train the model
     """
-    checkpoint = ModelCheckpoint('model-{epoch:03d}.h5',
-                                 monitor='val_loss',
-                                 verbose=0,
-                                 save_best_only=args.save_best_only,
+    checkpoint = ModelCheckpoint('model-{epoch:03d}.h5', #procurar ModelCheckpoint no keras
+                                 monitor='val_loss',     
+                                 verbose=0, 
+                                 save_best_only=args.save_best_only, 
                                  mode='auto')
 
-    model.compile(loss='mean_squared_error', optimizer=Adam(lr=args.learning_rate))
+    model.compile(loss='mean_squared_error', optimizer=Adam(lr=args.learning_rate)) #mean_squared_error no youtube
 
-    model.fit_generator(batch_generator(args.data_dir, X_train, y_train, args.batch_size, True),
-                        args.samples_per_epoch,
+    model.fit_generator(batch_generator(args.data_dir, X_train, y_train, args.batch_size, True),    #treinamento do modelo 
+                        args.samples_per_epoch, 
                         args.nb_epoch,
                         max_q_size=1,
-                        validation_data=batch_generator(args.data_dir, X_valid, y_valid, args.batch_size, False),
+                        validation_data=batch_generator(args.data_dir, X_valid, y_valid, args.batch_size, False), #compara o treinamento com os dados validos
                         nb_val_samples=len(X_valid),
-                        callbacks=[checkpoint],
+                        callbacks=[checkpoint], 
                         verbose=1)
 
 
@@ -104,10 +99,10 @@ def main(): #Parametros do modelo
     parser.add_argument('-k', help='drop out probability',  dest='keep_prob',         type=float, default=0.5)
     parser.add_argument('-n', help='number of epochs',      dest='nb_epoch',          type=int,   default=20)
     parser.add_argument('-s', help='samples per epoch',     dest='samples_per_epoch', type=int,   default=50000)
-    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=200)
+    parser.add_argument('-b', help='batch size',            dest='batch_size',        type=int,   default=300)
     parser.add_argument('-o', help='save best models only', dest='save_best_only',    type=s2b,   default='True')
     parser.add_argument('-l', help='learning rate',         dest='learning_rate',     type=float, default=1.0e-3)
-    args = parser.parse_args()
+    args = parser.parse_args() #cria uma váriavel args com com todos os paramentos acima. "dest" será o nome da variável
     print('-' * 30)
     print('Parameters')
     print('-' * 30)

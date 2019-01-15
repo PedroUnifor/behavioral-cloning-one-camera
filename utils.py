@@ -62,7 +62,7 @@ def preprocess(image):
 
 def choose_image(data_dir, center, steering_angle):
     """
-    Randomly choose an image from the center, left or right, and adjust
+    Randomly choose an image from the center and adjust
     the steering angle.
     """
     choice = np.random.choice(3)
@@ -142,7 +142,7 @@ def augument(data_dir, center, steering_angle, range_x=100, range_y=10):
     (The steering angle is associated with the center image)
     """
     image, steering_angle = choose_image(data_dir, center, steering_angle)
-    image, steering_angle = random_flip(image, steering_angle)
+    image, steering_angle = random_flip(image, steering_angle) #vira a imagem e os valores da rotação
     image, steering_angle = random_translate(image, steering_angle, range_x, range_y)
     #newimage = image.shape[:2]
     image = random_shadow(image)
@@ -159,13 +159,9 @@ def batch_generator(data_dir, image_paths, steering_angles, batch_size, is_train
     print(image_paths.shape[0]) 
     while True:
         i = 0
-        #print("aaaaaaaa")
         for index in np.random.permutation(image_paths.shape[0]): 
-            #print(index)
             center = image_paths[index]
             steering_angle = steering_angles[index]
-            #print("aaaaaaaa")
-            # argumentation
             if is_training and np.random.rand() < 0.6: #cria um numero radomico 
                 image, steering_angle = augument(data_dir, center, steering_angle)
             else:
