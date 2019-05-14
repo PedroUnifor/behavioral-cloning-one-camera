@@ -26,8 +26,7 @@ def load_data(args):
 	#test_size = percentual de treino e teste
     print('--------- ESSE E O X TRAIN -------------')
     print(X_train)
-    #plt.imshow(X_train[0])
-    #plt.show()
+
     print('--------- ESSE E O X VALID -------------')
     print(X_valid)
     print('--------- ESSE E O Y TRAIN -------------')
@@ -41,9 +40,10 @@ def load_data(args):
 
 def build_model(args): #criar a rede neural
 
-    model = Sequential() #cria um espaço em branco na memoria para o keras trabalhar
-    model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #camada de normalização
-    model.add(Conv2D(24, 5, 5, activation='elu', subsample=(2, 2)))
+    model = Sequential() #cria um espaço em branco na memoria para o keras trabalhar (modelo sequencial)
+    model.add(Lambda(lambda x: x/127.5-1.0, input_shape=INPUT_SHAPE)) #camada de normalização de imagem (ele vai escapar da saturação e o gradiente vai funcionar melhor) os números acima foram escolhidos depois de treinar e escolher diferentes valores. Esses foram os melhores. eles normalizam as imagens assim que são colocadas e evitam a saturação e fazem com que o gradiente funcione melhor.
+#ou seja, as imagens podem vim com sombras, de má qualidade. Essa função pode formatar e remodelar a imagem para trazer boas predições.
+    model.add(Conv2D(24, 5, 5, activation='elu', subsample=(2, 2))) #ELU = exponetial linear units ( usa ele porque ele cuida do problema gradiente de fuga)
     model.add(Conv2D(36, 5, 5, activation='elu', subsample=(2, 2)))
     model.add(Conv2D(48, 5, 5, activation='elu', subsample=(2, 2)))
     model.add(Conv2D(64, 3, 3, activation='elu'))
@@ -81,7 +81,7 @@ def train_model(model, args, X_train, X_valid, y_train, y_valid): #treinar o mod
                         verbose=1)
 
 
-def s2b(s):
+def s2b(s): #converter uma string para um valor booleano
     """
     Converts a string to boolean value
     """
@@ -110,9 +110,9 @@ def main(): #Parametros do modelo
         print('{:<20} := {}'.format(key, value))
     print('-' * 30)
 
-    data = load_data(args)
+    data = load_data(args) #atribui os valores da função load_data para a variavel data
     #print(data)
-    model = build_model(args)
+    model = build_model(args)  #atribui os valores do modelo criado do build_model para a variavel model
     #print(model)
     train_model(model, args, *data)
 
