@@ -24,10 +24,9 @@ app = Flask(__name__)
 model = None
 prev_image_array = None
 
-#MAX_SPEED = 25
-#MIN_SPEED = 6
-MAX_SPEED = 0.5
-MIN_SPEED = 0.1
+
+MAX_SPEED = 0.6
+MIN_SPEED = 0.3
 
 speed_limit = MAX_SPEED
 
@@ -35,28 +34,17 @@ url = "http://192.168.0.65/jpg/image.jpg"
 #url = "https://pay.google.com/about/static/images/social/og_image.jpg"
 
 def telemetry():
-        # The current steering angle of the car
-        #steering_angle = float(data["steering_angle"].replace(',','.'))
-        #steering_angle = float(data["steering_angle"])
         steering_angle = 0.0
-        # The current throttle of the car
-        #throttle = float(data["throttle"].replace(',','.'))
-        #throttle = float(data["throttle"])
         throttle = 0.0
-        # The current speed of the car
-        #speed = float(data["speed"].replace(',','.'))
-        #speed = float(data["speed"])
-        speed = 0.0
-        # The current image from the center camera of the car
+        speed = 0.0 # The current image from the center camera of the car
         resp = urllib.urlopen(url)
         image = np.asarray(bytearray(resp.read()), dtype="uint8")
         image = cv2.imdecode(image, cv2.IMREAD_COLOR)
-        #cv2.imshow('image', image)
         image = np.asarray(image)       # from PIL image to numpy array
         image = utils.preprocess(image) # apply the preprocessing
         image = np.array([image])       # the model expects 4D array
         steering_angle = float(model.predict(image, batch_size=1)) # colocar valores do throttle junto do steering_angle
-         
+        #model.predict pega o modelo criado da rede neural e calcula a rotação para o jaguar
         throttle = 1.0 - abs(steering_angle)
         if throttle>MAX_SPEED:
              throttle=MAX_SPEED
@@ -69,22 +57,22 @@ def telemetry():
         pub.publish(velocidade) 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Remote Driving')
+    parser = argparse.ArgumentParser(description='Remote Driving') #criando o parser
     parser.add_argument(
         'model',
         type=str,
         help='Path to model h5 file. Model should be on the same path.'
-    )
+    ) #adicionando os argumentos do parser para colocar o model-xxx.h5
     parser.add_argument(
         'image_folder',
         type=str,
         nargs='?',
         default='',
         help='Path to image folder. This is where the images from the run will be saved.'
-    )
-    args = parser.parse_args()
+    ) #gravar as imagens retiradas do jaguar em video
+    args = parser.parse_args() #pagando os argumentos do model.py
 
-    model = load_model(args.model)
+    model = load_model(args.model) #pagando os argumentos do model.py
 
     velocidade = Twist()
     pub = rospy.Publisher('drrobot_cmd_vel', Twist, queue_size=10)
